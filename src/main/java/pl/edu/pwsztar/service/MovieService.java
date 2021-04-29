@@ -1,6 +1,6 @@
 package pl.edu.pwsztar.service;
 
-import pl.edu.pwsztar.domain.dto.*;
+import pl.edu.pwsztar.movie.dto.*;
 
 import java.util.List;
 

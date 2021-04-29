@@ -1,4 +1,4 @@
-package pl.edu.pwsztar.controller;
+package pl.edu.pwsztar.movie;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pwsztar.domain.dto.*;
+import pl.edu.pwsztar.movie.domain.MovieFacade;
+import pl.edu.pwsztar.movie.dto.*;
 import pl.edu.pwsztar.service.MovieService;
 
 import java.util.List;
@@ -18,19 +19,23 @@ public class MovieApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MovieApiController.class);
 
-    private final MovieService movieService;
+
+    private final MovieFacade movieFacade;
+
+    public MovieApiController(MovieFacade movieFacade) {
+        this.movieFacade = movieFacade;
+    }
+
 
     @Autowired
-    public MovieApiController(MovieService movieService) {
-        this.movieService = movieService;
-    }
+
 
     @CrossOrigin
     @GetMapping(value = "/movies")
     public ResponseEntity<List<MovieDto>> getMovies() {
         LOGGER.info("find all movies");
 
-        List<MovieDto> moviesDto = movieService.findAll();
+        List<MovieDto> moviesDto = movieFacade.findAll();
         return new ResponseEntity<>(moviesDto, HttpStatus.OK);
     }
 
@@ -38,7 +43,7 @@ public class MovieApiController {
     @PostMapping(value = "/movies")
     public ResponseEntity<?> createMovie(@RequestBody CreateMovieDto createMovieDto) {
         LOGGER.info("create movie: {}", createMovieDto);
-        movieService.creatMovie(createMovieDto);
+        movieFacade.creatMovie(createMovieDto);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -47,7 +52,7 @@ public class MovieApiController {
     @DeleteMapping(value = "/movies/{movieId}")
     public ResponseEntity<Void> deleteMovie(@PathVariable Long movieId) {
         LOGGER.info("delete movie: {}", movieId);
-        movieService.deleteMovie(movieId);
+        movieFacade.deleteMovie(movieId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -56,7 +61,7 @@ public class MovieApiController {
     @GetMapping(value = "/movies/{movieId}")
     public ResponseEntity<DetailsMovieDto> detailsMovie(@PathVariable Long movieId) {
         LOGGER.info("details movie: {}", movieId);
-        DetailsMovieDto detailsMovieDto = movieService.findMovie(movieId);
+        DetailsMovieDto detailsMovieDto = movieFacade.findMovie(movieId);
 
         return new ResponseEntity<>(detailsMovieDto, HttpStatus.OK);
     }
@@ -66,7 +71,7 @@ public class MovieApiController {
     public ResponseEntity<Void> updateMovie(@RequestBody UpdateMovieDto updateMovieDto,
                                             @PathVariable Long movieId) {
         LOGGER.info("update movie: {}", movieId);
-        movieService.updateMovie(movieId, updateMovieDto);
+        movieFacade.updateMovie(movieId, updateMovieDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -76,7 +81,7 @@ public class MovieApiController {
     public ResponseEntity<MovieCounterDto> countMovies() {
         LOGGER.info("count movies");
 
-        MovieCounterDto movieCounterDto = movieService.countMovies();
+        MovieCounterDto movieCounterDto = movieFacade.countMovies();
         return new ResponseEntity<>(movieCounterDto, HttpStatus.OK);
     }
 
