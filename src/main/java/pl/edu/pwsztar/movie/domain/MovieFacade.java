@@ -43,7 +43,8 @@ public class MovieFacade {
 
 
     public MovieCounterDto countMovies() {
-        return new MovieCounterDto..counter(movieRepository.count()).build();
+
+        return MovieCounterDto.builder().counter(movieRepository.count()).build();
     }
 
     public void updateMovie(Long movieId, UpdateMovieDto updateMovieDto) {
@@ -51,10 +52,9 @@ public class MovieFacade {
         requireNonNull(movieId);
         Movie movie = movieRepository.findOneByMovieId(movieId);
 
-
-            movieRepository.save(movie.toBuilder().title(updateMovieDto.getTitle()).image(updateMovieDto.getImage()).videoId(updateMovieDto.getVideoId()).year(updateMovieDto.getYear()).build());
-        }
+        movieRepository.save(movie.toBuilder().title(updateMovieDto.getTitle()).image(updateMovieDto.getImage()).videoId(updateMovieDto.getVideoId()).year(updateMovieDto.getYear()).build());
     }
-
-
 }
+
+
+

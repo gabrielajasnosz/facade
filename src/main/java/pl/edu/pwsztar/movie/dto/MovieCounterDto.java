@@ -11,7 +11,7 @@ import lombok.*;
 
 public class MovieCounterDto {
 
-    private final long counter=0;
+    private long counter;
 
 
 }
